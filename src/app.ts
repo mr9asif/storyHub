@@ -3,6 +3,7 @@ import cors from 'cors';
 import "dotenv/config";
 import express, { Application, Request, Response } from 'express';
 import config from "./config";
+import { AuthRoutes } from "./modules/auth/auth.route";
 import { UserRoutes } from "./modules/user/user.route";
 
 
@@ -23,5 +24,6 @@ app.get("/", (req:Request, res:Response)=>{
 
 
 app.use('/api/user', UserRoutes);
+app.use('/api/auth', AuthRoutes)
 
 export default app;
