@@ -1,6 +1,7 @@
 import bcrypt from 'bcrypt';
 import { prisma } from "../../../lib/prisma";
-import jwt from '../../../utils/jwt';
+
+import { Jwt } from '../../../utils/jwt';
 import config from '../../config';
 import { LoginPayload } from "./auth.interface";
 
@@ -28,9 +29,9 @@ const loginUser=async(payload:LoginPayload)=>{
 
     
 
-     const accessToken =  jwt(JwtPayload, config.jwt_access_secret!, '1d')
+     const accessToken =  Jwt.createToken(JwtPayload, config.jwt_access_secret!, '1d')
       
-      const refreshToken =  jwt(JwtPayload, config.jwt_access_secret!, '7d')
+      const refreshToken =  Jwt.createToken(JwtPayload, config.jwt_access_secret!, '7d')
 
     return {
         accessToken, refreshToken
