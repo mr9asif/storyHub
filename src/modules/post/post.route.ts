@@ -14,15 +14,15 @@ router.post(
 
 router.get("/", PostController.getAllPosts);
 
-router.get("/:postId", PostController.getPostById);
-
 // router.get("/stats", auth(Role.ADMIN), PostController.getPostsStats);
 
-// router.get(
-//   "/my-posts",
-//   auth(Role.USER, Role.ADMIN, Role.AUTHOR),
-//   PostController.getMyPosts,
-// );
+router.get(
+  "/myPosts",
+  auth(Role.USER, Role.ADMIN, Role.AUTHOR),
+  PostController.getMyPosts,
+);
+
+// router.get("/:postId", PostController.getPostById);
 
 // router.get("/:postId", PostController.getPostById);
 
