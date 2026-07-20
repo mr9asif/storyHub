@@ -23,28 +23,77 @@ const getAllPosts = async () => {
   return posts;
 };
 const getPostById = async (postId: string) => {
-  const post = await prisma.post.findUniqueOrThrow({
-    where: { id: postId },
-  });
+  // evabe view count error hoileo hoye jai,tai eta use kora jabe na. transection use korte hobe
+  // await prisma.post.update({
+  //   where: {
+  //     id: postId,
+  //   },
+  //   data: {
+  //     views: {
+  //       increment: 1,
+  //     },
+  //   },
+  // });
+  // fake error
+  // throw new Error("fake erro");
+  // const post = await prisma.post.findUniqueOrThrow({
+  //   where: { id: postId },
+  //   include: {
+  //     author: {
+  //       omit: { password: true },
+  //     },
+  //     comments: {
+  //       orderBy: {
+  //         createdAt: "desc",
+  //       },
+  //     },
+  //     _count: {
+  //       select: {
+  //         comments: true,
+  //       },
+  //     },
+  //   },
+  // });
 
-  const updatePost = await prisma.post.update({
-    where: {
-      id: postId,
-    },
-    data: {
-      views: {
-        increment: 1,
-      },
-    },
-    include: {
-      author: {
-        omit: { password: true },
-      },
-      comments: true,
-    },
-  });
+  // return post;
 
-  return updatePost;
+  // transection use kore update jeno view count error hoileo na count hoi
+  const getPostByIdWithTx = await prisma.$transaction(async (tx) => {
+    // update post
+    await tx.post.update({
+      where: {
+        id: postId,
+      },
+      data: {
+        views: {
+          increment: 1,
+        },
+      },
+    });
+    //  fake error to check view is update auto or not
+    // throw new Error("fake error");
+    // get post using tx
+    const post = await tx.post.findFirstOrThrow({
+      where: { id: postId },
+      include: {
+        author: {
+          omit: { password: true },
+        },
+        comments: {
+          orderBy: {
+            createdAt: "desc",
+          },
+        },
+        _count: {
+          select: {
+            comments: true,
+          },
+        },
+      },
+    });
+    return post;
+  });
+  return getPostByIdWithTx;
 };
 const updatePost = async (
   postId: string,
