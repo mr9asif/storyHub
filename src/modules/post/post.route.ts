@@ -22,20 +22,20 @@ router.get(
   PostController.getMyPosts,
 );
 
-// router.get("/:postId", PostController.getPostById);
+router.get("/:postId", PostController.getPostById);
 
 // router.get("/:postId", PostController.getPostById);
 
-// router.patch(
-//   "/:postId",
-//   auth(Role.USER, Role.ADMIN, Role.AUTHOR),
-//   PostController.updatePost,
-// );
+router.patch(
+  "/:postId",
+  auth(Role.USER, Role.ADMIN, Role.AUTHOR),
+  PostController.updatePost,
+);
 
-// router.delete(
-//   "/:postId",
-//   auth(Role.USER, Role.ADMIN, Role.AUTHOR),
-//   PostController.deletePost,
-// );
+router.delete(
+  "/:postId",
+  auth(Role.USER, Role.ADMIN, Role.AUTHOR),
+  PostController.deletePost,
+);
 
 export const postRoutes = router;

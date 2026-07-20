@@ -58,9 +58,45 @@ const getMyPosts = catchAsync(
     });
   },
 );
+
+const updatePost = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const postId = req.params.postId;
+    const payload = req.body;
+    const authorId = req.user?.id;
+    const updatepost = await postService.updatePost(
+      postId as string,
+      payload,
+      authorId as string,
+    );
+
+    sendResponse(res, {
+      success: true,
+      statusCode: httpstatus.OK,
+      message: "post updated successfully",
+      data: { updatepost },
+    });
+  },
+);
+
+const deletePost = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const postId = req.params.postId;
+    const result = await postService.deletePost(postId as string);
+
+    sendResponse(res, {
+      success: true,
+      statusCode: httpstatus.OK,
+      message: "Post deleted successfully",
+      data: { result },
+    });
+  },
+);
 export const PostController = {
   createPost,
   getAllPosts,
   getPostById,
   getMyPosts,
+  updatePost,
+  deletePost,
 };
