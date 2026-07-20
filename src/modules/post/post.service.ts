@@ -22,7 +22,30 @@ const getAllPosts = async () => {
 
   return posts;
 };
-const getPostById = () => {};
+const getPostById = async (postId: string) => {
+  const post = await prisma.post.findUniqueOrThrow({
+    where: { id: postId },
+  });
+
+  const updatePost = await prisma.post.update({
+    where: {
+      id: postId,
+    },
+    data: {
+      views: {
+        increment: 1,
+      },
+    },
+    include: {
+      author: {
+        omit: { password: true },
+      },
+      comments: true,
+    },
+  });
+
+  return updatePost;
+};
 const updatePost = () => {};
 const deletePost = () => {};
 const getPostsStats = () => {};
